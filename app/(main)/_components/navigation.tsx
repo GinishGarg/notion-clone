@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon } from "lucide-react";
+import { ChevronsLeft, MenuIcon, Sidebar } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ElementRef, useRef, useState } from "react";
 import {useMediaQuery} from "usehooks-ts"
@@ -60,10 +60,23 @@ const Navigation = () => {
         }
     }
 
+    const collapse = () =>{
+        if(sideBarRef.current && navbarRef.current){
+            setIsCollapsed(true);
+            setIsResetting(true);
+
+            sideBarRef.current.style.width = "0";
+            navbarRef.current.style.setProperty("width","100%");
+            navbarRef.current.style.setProperty("left","0")
+            setTimeout(()=>{setIsResetting(false),300})
+        }
+    }
+
 
     return ( 
         <>
         <aside 
+        onClick={collapse}
         ref={sideBarRef}
         className={cn("group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col z-[99999]",
             isResetting && 'transition-all ease-in-out duration-300' ,isMobile && "w-0"
