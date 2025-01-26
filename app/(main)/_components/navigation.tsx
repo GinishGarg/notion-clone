@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { ChevronsLeft, MenuIcon, Sidebar } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { ElementRef, useRef, useState } from "react";
+import { ElementRef, useEffect, useRef, useState } from "react";
 import {useMediaQuery} from "usehooks-ts"
 
 const Navigation = () => {
@@ -15,6 +15,20 @@ const Navigation = () => {
     const navbarRef = useRef<ElementRef<"div">>(null);
     const [isResetting,setIsResetting] = useState(false);
     const [isCollapsed,setIsCollapsed] = useState(isMobile)
+    useEffect(()=>{
+        if(isMobile){
+            collapse()
+        } else{
+            resetWidth()
+        }
+    },[isMobile])
+    useEffect(()=>{
+        if(isMobile){
+            collapse
+        } else{
+            resetWidth()
+        }
+    },[pathname,isMobile])
     const handleMouseDown = (event:React.MouseEvent<HTMLDivElement,MouseEvent>) =>{
         event.preventDefault()
         event.stopPropagation()
@@ -100,7 +114,7 @@ const Navigation = () => {
         </aside>
         <div ref={navbarRef} className={cn("absolute top-0 z-[99999] left-60 w-[calc(100%-240px",isResetting && "transition-all ease-in-out duration-300",isMobile && "left-0 w-full")}>
             <nav className="bg-transparent px-3 py-2 w-full ">
-                {isCollapsed && <MenuIcon role="button" className="h-6 w-6 text-muted-foreground"/>}
+                {isCollapsed && <MenuIcon onClick={resetWidth}role="button" className="h-6 w-6 text-muted-foreground"/>}
             </nav>
         </div>
         </>
