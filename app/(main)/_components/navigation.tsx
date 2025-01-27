@@ -10,11 +10,11 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import Item from "./item";
 import { toast } from "sonner";
+import DocumentList from "./documentlist";
 
 const Navigation = () => {
     const pathname = usePathname();
     const isMobile = useMediaQuery("(max-width: 768px")
-    const documents = useQuery(api.documents.get)
     const create =useMutation(api.documents.create)
 
     const isResizingRef = useRef(false);
@@ -140,10 +140,7 @@ const Navigation = () => {
             />
         </div>
         <div className="mt-4">
-            <p>{documents?.map((document)=>(
-                <p key={document._id}>{document.title}</p>
-            ))}</p>
-
+            <DocumentList/>
         </div>
         <div 
         onMouseDown={handleMouseDown}
