@@ -39,11 +39,25 @@ const Item = ({
 }:ItemProps) => {
     const {user} = useUser();
     const create = useMutation(api.documents.create);
+    const archive = useMutation(api.documents.archive)
     const router = useRouter();
     const handleExpand = (event : React.MouseEvent<HTMLDivElement,MouseEvent>) =>{
         event.stopPropagation()
         onExpand?.();
 
+    }
+    const onArchive = (
+        event: React.MouseEvent<HTMLDivElement,MouseEvent>
+    ) =>{
+        event.stopPropagation();
+        if(!id) return;
+        const promise = archive({id});
+
+        toast.promise(promise,{
+            loading:"Adding Note to archive...",
+            success:"Added note to the archive",
+            error:"Failed to add note to the archive"
+        })
     }
 
     const onCreate = (
@@ -117,7 +131,7 @@ const Item = ({
                     align="start"
                     side="right"
                     forceMount>
-                        <DropdownMenuItem onClick={()=>{}}>
+                        <DropdownMenuItem onClick={onArchive}>
                             <Trash className="h-4 w-4 mr-2"/>
                             Delete
                         </DropdownMenuItem>
