@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings, Sidebar } from "lucide-react";
+import { ChevronsLeft, MenuIcon, Plus, PlusCircle, Search, Settings, Sidebar, Trash } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import {useMediaQuery} from "usehooks-ts"
@@ -11,6 +11,8 @@ import { api } from "@/convex/_generated/api";
 import Item from "./item";
 import { toast } from "sonner";
 import DocumentList from "./documentlist";
+import { Popover, PopoverContent } from "@/components/ui/popover";
+import { PopoverTrigger } from "@radix-ui/react-popover";
 
 const Navigation = () => {
     const pathname = usePathname();
@@ -109,7 +111,7 @@ const Navigation = () => {
     return ( 
         <>
         <aside 
-        onClick={collapse}
+        onClick={(e)=>e.stopPropagation()}
         ref={sideBarRef}
         className={cn("group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col z-[99999]",
             isResetting && 'transition-all ease-in-out duration-300' ,isMobile && "w-0"
@@ -117,7 +119,7 @@ const Navigation = () => {
         <div role="button" className={cn("h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition",
             isMobile && "opacity-100")
         }>
-            <ChevronsLeft className="h-6 w-6"/>
+            <ChevronsLeft onClick={collapse} className="h-6 w-6"/>
         </div>
         <div>
             <UserItem />
@@ -141,6 +143,16 @@ const Navigation = () => {
         </div>
         <div className="mt-4">
             <DocumentList/>
+            
+        <Item onClick={handleCreate} icon={Plus} label="Add a page"/>
+        <Popover>
+            <PopoverTrigger className="w-full mt-4">
+                <Item label="trash" icon={Trash} />
+            </PopoverTrigger>
+            <PopoverContent className="p-0 w-72" side={isMobile ? "bottom" : "right"}>
+                <p>TrashBox</p>
+            </PopoverContent>
+        </Popover>
         </div>
         <div 
         onMouseDown={handleMouseDown}
